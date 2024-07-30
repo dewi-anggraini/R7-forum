@@ -4,7 +4,8 @@ Questions for Lesson 7
 before some or all of the controller actions execute?  Where can you put that
 change so that it affects all controllers?
 
-
+before_action method
+ApplicationController in current method
 
 2. Consider the following statement:
 
@@ -14,13 +15,20 @@ This creates several files, including two you need to know about.  What are they
 After you do this statement but before starting the rails server, you have to do another
 command.  What is that command?
 
-
+creates app/models/subscription.rb and migration files
+bin/rails db:migrate
 
 3. What table is created as a result of the migration described above? What are the column
 names in that table? What is the primary key? What are the foreign keys?  What does a 
 foreign key do?
-
-
+table created are subscriptions table
+the columns are 
+id = the primary key, by default. unique identifier for a records within the tables
+user = foreign key, links records between different tables
+forum = foreign key, links records between different tables
+priority = integer
+created_at = automated field
+updated_at = automated field
 
 4. You have the following lines in the Subscription model:
 
@@ -32,7 +40,8 @@ that if you have a @subscription (an instance of Subscription), you have a coupl
 used to refer to associated database methods.  What are those methods?  (Actually there are a few,
 but there are two in particular you should know.)
 
-
+user_id and forum_id
+or call the user object @subscription.user
 
 5. You have the following lines in the User model.
 
@@ -40,9 +49,11 @@ has_many :subscriptions
 has_many :posts
 has_many :forums, through: :subscriptions
 
-What are threee important methods that are available to instances of the user model because
+What are three important methods that are available to instances of the user model because
 of these lines?
-
+@user.subscriptions
+@user.posts
+@user.forums
 
 
 6. Suppose that user is an instance of the User class. What kind of object is returned by
@@ -66,7 +77,8 @@ new_subscription = user.subscriptions.new
 Try that last line.  You will see that it creates a subscription object, but that
 object is not entirely empty.  Which attribute is set? Where does it get that
 value?
-
+"user_id: 1" is not empty, Current value was setted.
+user_id got the value from subscriptions
 
 
 7. Suppose that user is an instance of User, and forum is an instance of Forum.  What
@@ -74,7 +86,7 @@ Active Record Statement could you use to retrieve all the user's posts for that
 forum?  Hint: You need to have a where in your statement. Try this out in the console.
 You will see the SQL that is executed logged to the screen.  What is that SQL?
 
-
+SELECT "posts".* FROM "posts" WHERE "posts"."user_id" = ?  [["user_id", 1]]
 
 8. You have the following method in your posts controller:
 
@@ -87,19 +99,23 @@ You will see the SQL that is executed logged to the screen.  What is that SQL?
 There is a security exposure, a risk that a hacker could do damage.  What is that
 risk? What two things are done in your code to prevent the risk?
 
-
+It is very easy for someone to bypass the views by sending GET/POST/PUT/PATCH/DELETE methods directly to the controller
+by using before_action and "strong parameter"
 
 9. The routes for subscriptions are nested under the forum routes.  How does this
 change the routes?  What is the additional hash key and value that is passed in the
 params hash to the subscriptions controller as a result of this nesting? Which routes
 are unaffected by the nesting?
 
-
+it will generates some routes and creates helper that associated to specific forum
+(params[:forum_id])
+routes that doesn't affected by the nesting users resources
 
 
 10. Every action method must do exactly one of two things -- that is, each
 method may do all sorts of logic, but at the end, it has to do one of two
 things, depending on the outcome of the logic.  What are those two things?
 
-
+initialize or preparing data for request
+rendering the response
 
