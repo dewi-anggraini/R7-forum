@@ -2,11 +2,8 @@
   url = post_path
   else 
   url = forum_posts_path(post.forum)
-  end %>
-  
-<%= form_with(model: post, url: url) do |form| %>
-  
-<%= form_with(model: post) do |form| %>
+  end %>  
+<%= form_with(model: post, url: url) do |form| %> 
     <% if post.errors.any? %>
       <div style="color: red">
         <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
@@ -32,4 +29,4 @@
     <div>
       <%= form.submit %>
     </div>
-  <% end %>
+<% end %>
